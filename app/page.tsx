@@ -33,7 +33,7 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      {/* Header z informacjami o levelu */}
+      {/* Header with level information */}
       <header className={styles.header}>
         <div className={styles.levelInfo}>
           <h1 className={styles.title}>gym.fun</h1>
@@ -44,7 +44,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Pasek postępu */}
+      {/* Progress bar */}
       <div className={styles.progressContainer}>
         <div className={styles.progressBar}>
           <div 
@@ -57,7 +57,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Główny przycisk gry */}
+      {/* Main game button */}
       <div className={styles.gameArea}>
         <button 
           className={`${styles.pumpButton}`}
@@ -67,13 +67,13 @@ export default function Home() {
           <span className={styles.pumpSubtext}>+1 XP</span>
         </button>
         
-        {/* Efekty wizualne */}
+        {/* Visual effects */}
         <GameEffects 
           isPlaying={isPlaying}
           currentXP={currentXP}
         />
         
-        {/* Animacja level up */}
+        {/* Level up animation */}
         {showLevelUp && (
           <div className={styles.levelUpAnimation}>
             <span className={styles.levelUpText}>LEVEL UP!</span>
@@ -81,7 +81,7 @@ export default function Home() {
         )}
       </div>
 
-      {/* Statystyki gry */}
+      {/* Game statistics */}
       <GameStats 
         currentLevel={currentLevel}
         currentXP={currentXP}
@@ -89,21 +89,7 @@ export default function Home() {
         progressPercentage={progressPercentage}
       />
 
-      {/* Informacje o grze */}
-      <div className={styles.gameInfo}>
-        <p className={styles.infoText}>
-          Klikaj przycisk aby zdobywać punkty!<br/>
-          Punkty spadają w czasie - nie przestawaj pompować!
-        </p>
-        <div className={styles.nextLevelInfo}>
-          <span>Następny level: {calculateRequiredXP(currentLevel + 1)} XP</span>
-          {isEligibleForReward(currentLevel) && (
-            <div className={styles.tokenReward}>
-              🎁 Nagroda: {calculateTokenReward(currentLevel)} {GAME_CONFIG.BLOCKCHAIN.TOKEN_SYMBOL}
-            </div>
-          )}
-        </div>
-      </div>
+      
     </div>
   );
 }

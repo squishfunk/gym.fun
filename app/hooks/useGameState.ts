@@ -25,11 +25,11 @@ export function useGameState() {
   const [tokenReward, setTokenReward] = useState(0);
   const [previousLevel, setPreviousLevel] = useState(1);
 
-  // Oblicz wymagane punkty dla aktualnego levelu
+  // Calculate required points for current level
   const requiredXP = calculateRequiredXP(currentLevel);
   const progressPercentage = Math.min((currentXP / requiredXP) * 100, 100);
 
-  // Efekt do obsługi spadku punktów w czasie
+  // Effect to handle point decay over time
   useEffect(() => {
     if (!isPlaying) return;
 
@@ -37,10 +37,10 @@ export function useGameState() {
       setCurrentXP((prevXP: number) => {
         const newXP = Math.max(0, prevXP - GAME_CONFIG.DECAY_RATE);
         
-        // Sprawdź czy gracz awansował do następnego levelu
+        // Check if player advanced to next level
         // if (newXP >= requiredXP) {
         //   setCurrentLevel((prevLevel: number) => prevLevel + 1);
-        //   return 0; // Reset paska po awansie
+        //   return 0; // Reset bar after advancement
         // }
         
         return newXP;
@@ -50,7 +50,7 @@ export function useGameState() {
     return () => clearInterval(interval);
   }, [isPlaying, requiredXP]);
 
-  // Reset gry po określonym czasie bez aktywności
+  // Reset game after specified time without activity
   useEffect(() => {
     if (!lastClickTime) return;
 
@@ -62,37 +62,32 @@ export function useGameState() {
     return () => clearTimeout(timeout);
   }, [lastClickTime]);
 
-  // Obsługa level up
+  // Handle level up
   const handleLevelUp = useCallback(() => {
     setShowLevelUp(true);
     setTimeout(() => setShowLevelUp(false), GAME_CONFIG.ANIMATION_DURATION);
     
-    // Sprawdź czy gracz kwalifikuje się do nagrody tokenowej
+    // Check if player qualifies for token reward
     const reward = calculateTokenReward(currentLevel);
     if (reward > 0) {
       setTokenReward(reward);
     }
   }, [currentLevel]);
 
-  // Obsługa kliknięcia przycisku
+  // Handle button click
   const handlePump = useCallback(() => {
     setCurrentXP((prevXP: number) => {
       const newXP = prevXP + 1;
       
-      // Sprawdź czy gracz awansował do następnego levelu
-      if (newXP >= requiredXP) {
-        setCurrentLevel((prevLevel: number) => prevLevel + 1);
-        return 0; // Reset paska po awansie
-      }
-      
+      // Just add XP, let useEffect handle level up
       return newXP;
     });
     
     setLastClickTime(Date.now());
     setIsPlaying(true);
-  }, [requiredXP]);
+  }, []);
 
-  // Efekt do wykrywania zmiany levelu i wywołania level up
+  // Effect to detect level change and trigger level up
   useEffect(() => {
     if (currentLevel > previousLevel) {
       setPreviousLevel(currentLevel);
@@ -100,7 +95,15 @@ export function useGameState() {
     }
   }, [currentLevel, previousLevel, handleLevelUp]);
 
-  // Reset gry
+  // Effect to handle level advancement when XP reaches required amount
+  useEffect(() => {
+    if (currentXP >= requiredXP) {
+      setCurrentLevel((prevLevel: number) => prevLevel + 1);
+      setCurrentXP(0); // Reset XP after level up
+    }
+  }, [currentXP, requiredXP]);
+
+  // Reset game
   const resetGame = useCallback(() => {
     setCurrentLevel(1);
     setCurrentXP(0);

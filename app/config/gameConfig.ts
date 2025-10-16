@@ -1,38 +1,38 @@
-// Konfiguracja gry gym.fun
+// gym.fun game configuration
 export const GAME_CONFIG = {
-  // System leveli
+  // Level system
   BASE_XP: 10,
   GROWTH_RATE: 0.15,
-  DECAY_RATE: 0.5,
+  DECAY_RATE: 1,
   
   // Timing
-  INACTIVITY_TIMEOUT: 5000, // 5 sekund
-  DECAY_INTERVAL: 1000, // 1 sekunda
+  INACTIVITY_TIMEOUT: 5000, // 5 seconds
+  DECAY_INTERVAL: 1000, // 1 second
   
   // UI
-  ANIMATION_DURATION: 2000, // 2 sekundy
-  XP_ANIMATION_DURATION: 1000, // 1 sekunda
+  ANIMATION_DURATION: 2000, // 2 seconds
+  XP_ANIMATION_DURATION: 1000, // 1 second
   
-  // Przyszłe rozszerzenia blockchain
+  // Future blockchain extensions
   BLOCKCHAIN: {
     NETWORK: 'base', // Base Layer2
     TOKEN_SYMBOL: 'GYM',
     DECIMALS: 18,
     LEVEL_REWARDS: {
-      5: 100,    // 100 tokenów za level 5
-      10: 250,   // 250 tokenów za level 10
-      20: 500,   // 500 tokenów za level 20
-      50: 1000,  // 1000 tokenów za level 50
+      5: 100,    // 100 tokens for level 5
+      10: 250,   // 250 tokens for level 10
+      20: 500,   // 500 tokens for level 20
+      50: 1000,  // 1000 tokens for level 50
     }
   }
 } as const;
 
-// Funkcja obliczająca wymagane punkty dla danego levelu
+// Function to calculate required points for a given level
 export const calculateRequiredXP = (level: number): number => {
   return Math.floor(GAME_CONFIG.BASE_XP * Math.pow(1 + GAME_CONFIG.GROWTH_RATE, level - 1));
 };
 
-// Funkcja obliczająca nagrodę tokenową za level
+// Function to calculate token reward for a level
 export const calculateTokenReward = (level: number): number => {
   const rewards = GAME_CONFIG.BLOCKCHAIN.LEVEL_REWARDS;
   const rewardLevels = Object.keys(rewards).map(Number).sort((a, b) => b - a);
@@ -46,7 +46,7 @@ export const calculateTokenReward = (level: number): number => {
   return 0;
 };
 
-// Funkcja sprawdzająca czy gracz kwalifikuje się do nagrody
+// Function to check if player qualifies for reward
 export const isEligibleForReward = (level: number): boolean => {
   return calculateTokenReward(level) > 0;
 };

@@ -1,179 +1,179 @@
 # gym.fun API Documentation
 
-## Przegląd
+## Overview
 
-gym.fun to mobilna gra clicker z systemem leveli i nagrodami tokenowymi. Aplikacja jest zbudowana w Next.js z integracją blockchain przez Coinbase OnchainKit.
+gym.fun is a mobile clicker game with a level system and token rewards. The application is built in Next.js with blockchain integration through Coinbase OnchainKit.
 
-## Struktura Komponentów
+## Component Structure
 
-### Główne Komponenty
+### Main Components
 
 #### `Home` (app/page.tsx)
-Główny komponent aplikacji zawierający:
-- Interfejs gry
-- Pasek postępu
-- Przycisk PUMP
-- Statystyki gracza
+Main application component containing:
+- Game interface
+- Progress bar
+- PUMP button
+- Player statistics
 
 #### `GameEffects` (app/components/GameEffects.tsx)
-Komponent odpowiedzialny za efekty wizualne:
-- Animacje zdobywania XP
-- Wskaźnik aktywności
-- Obsługa level up
+Component responsible for visual effects:
+- XP gain animations
+- Activity indicator
+- Level up handling
 
 #### `GameStats` (app/components/GameStats.tsx)
-Komponent wyświetlający statystyki gry:
-- Aktualny level
-- Punkty XP
-- Postęp do następnego levelu
-- Nagrody tokenowe
+Component displaying game statistics:
+- Current level
+- XP points
+- Progress to next level
+- Token rewards
 
 ### Hooks
 
 #### `useGameState` (app/hooks/useGameState.ts)
-Hook zarządzający stanem gry:
-- Stan gry (level, XP, aktywność)
-- Akcje (kliknięcie, level up, reset)
-- Logika decay i awansów
+Hook managing game state:
+- Game state (level, XP, activity)
+- Actions (click, level up, reset)
+- Decay logic and advancements
 
-## Konfiguracja
+## Configuration
 
 ### `gameConfig.ts`
-Główna konfiguracja gry:
+Main game configuration:
 
 ```typescript
 export const GAME_CONFIG = {
-  BASE_XP: 100,           // Bazowa ilość XP dla pierwszego levelu
-  GROWTH_RATE: 0.15,      // 15% wzrost dla każdego kolejnego levelu
-  DECAY_RATE: 0.5,        // Punkty tracone na sekundę
-  INACTIVITY_TIMEOUT: 5000, // Timeout bezczynności (ms)
-  DECAY_INTERVAL: 1000,    // Interwał decay (ms)
-  ANIMATION_DURATION: 2000, // Czas trwania animacji (ms)
+  BASE_XP: 10,            // Base XP amount for first level
+  GROWTH_RATE: 0.15,      // 15% growth for each subsequent level
+  DECAY_RATE: 0.5,        // Points lost per second
+  INACTIVITY_TIMEOUT: 5000, // Inactivity timeout (ms)
+  DECAY_INTERVAL: 1000,    // Decay interval (ms)
+  ANIMATION_DURATION: 2000, // Animation duration (ms)
   
   BLOCKCHAIN: {
     NETWORK: 'base',
     TOKEN_SYMBOL: 'GYM',
     DECIMALS: 18,
     LEVEL_REWARDS: {
-      5: 100,    // 100 tokenów za level 5
-      10: 250,   // 250 tokenów za level 10
-      20: 500,   // 500 tokenów za level 20
-      50: 1000,  // 1000 tokenów za level 50
+      5: 100,    // 100 tokens for level 5
+      10: 250,   // 250 tokens for level 10
+      20: 500,   // 500 tokens for level 20
+      50: 1000,  // 1000 tokens for level 50
     }
   }
 }
 ```
 
-## Algorytmy
+## Algorithms
 
-### System Leveli
+### Level System
 ```typescript
 XP_n = baseXP * (1 + growthRate)^(n-1)
 ```
 
-**Przykłady:**
-- Level 1: 100 XP
-- Level 2: 115 XP (100 * 1.15^1)
-- Level 3: 132 XP (100 * 1.15^2)
-- Level 4: 152 XP (100 * 1.15^3)
+**Examples:**
+- Level 1: 10 XP
+- Level 2: 12 XP (10 * 1.15^1)
+- Level 3: 13 XP (10 * 1.15^2)
+- Level 4: 15 XP (10 * 1.15^3)
 
 ### Decay System
-- Punkty spadają o `DECAY_RATE` co `DECAY_INTERVAL`
-- Reset po `INACTIVITY_TIMEOUT` bez aktywności
-- Spadek zatrzymuje się na 0
+- Points decrease by `DECAY_RATE` every `DECAY_INTERVAL`
+- Reset after `INACTIVITY_TIMEOUT` without activity
+- Decay stops at 0
 
-### Nagrody Tokenowe
-- Nagrody przyznawane za określone poziomy
-- System hierarchiczny (najwyższa dostępna nagroda)
-- Integracja z blockchain (przygotowane na przyszłość)
+### Token Rewards
+- Rewards given for specific levels
+- Hierarchical system (highest available reward)
+- Blockchain integration (prepared for future)
 
-## API Funkcji
+## API Functions
 
 ### `calculateRequiredXP(level: number): number`
-Oblicza wymagane punkty dla danego levelu.
+Calculates required points for a given level.
 
-**Parametry:**
-- `level` - numer levelu (>= 1)
+**Parameters:**
+- `level` - level number (>= 1)
 
-**Zwraca:**
-- Liczbę wymaganych punktów XP
+**Returns:**
+- Number of required XP points
 
 ### `calculateTokenReward(level: number): number`
-Oblicza nagrodę tokenową za dany level.
+Calculates token reward for a given level.
 
-**Parametry:**
-- `level` - numer levelu
+**Parameters:**
+- `level` - level number
 
-**Zwraca:**
-- Liczbę tokenów (0 jeśli brak nagrody)
+**Returns:**
+- Number of tokens (0 if no reward)
 
 ### `isEligibleForReward(level: number): boolean`
-Sprawdza czy gracz kwalifikuje się do nagrody.
+Checks if player qualifies for reward.
 
-**Parametry:**
-- `level` - numer levelu
+**Parameters:**
+- `level` - level number
 
-**Zwraca:**
-- `true` jeśli kwalifikuje się do nagrody
+**Returns:**
+- `true` if qualifies for reward
 
-## Stany Komponentów
+## Component States
 
 ### `GameState`
 ```typescript
 interface GameState {
-  currentLevel: number;    // Aktualny level
-  currentXP: number;        // Aktualne punkty XP
-  isPlaying: boolean;       // Czy gra jest aktywna
-  lastClickTime: number | null; // Czas ostatniego kliknięcia
-  showLevelUp: boolean;     // Czy pokazać animację level up
-  tokenReward: number;      // Aktualna nagroda tokenowa
+  currentLevel: number;    // Current level
+  currentXP: number;        // Current XP points
+  isPlaying: boolean;       // Whether game is active
+  lastClickTime: number | null; // Time of last click
+  showLevelUp: boolean;     // Whether to show level up animation
+  tokenReward: number;      // Current token reward
 }
 ```
 
 ### `GameActions`
 ```typescript
 interface GameActions {
-  handlePump: () => void;      // Obsługa kliknięcia PUMP
-  handleLevelUp: () => void;   // Obsługa awansu
-  resetGame: () => void;       // Reset gry
+  handlePump: () => void;      // Handle PUMP click
+  handleLevelUp: () => void;   // Handle advancement
+  resetGame: () => void;       // Reset game
 }
 ```
 
-## Stylizacja
+## Styling
 
 ### CSS Modules
-- `page.module.css` - główne style
-- Responsywny design
-- Animacje CSS
-- Gradient tła
-- Efekty wizualne
+- `page.module.css` - main styles
+- Responsive design
+- CSS animations
+- Gradient backgrounds
+- Visual effects
 
-### Kluczowe Style
-- `.container` - główny kontener
-- `.pumpButton` - przycisk gry
-- `.progressBar` - pasek postępu
-- `.levelUpAnimation` - animacja awansu
-- `.tokenReward` - nagrody tokenowe
+### Key Styles
+- `.container` - main container
+- `.pumpButton` - game button
+- `.progressBar` - progress bar
+- `.levelUpAnimation` - advancement animation
+- `.tokenReward` - token rewards
 
-## Testy
+## Tests
 
 ### `gameLogic.test.ts`
-Testy jednostkowe dla:
-- Obliczania wymaganych XP
-- Nagród tokenowych
-- Kwalifikacji do nagród
-- Integracji systemów
+Unit tests for:
+- Required XP calculations
+- Token rewards
+- Reward eligibility
+- System integration
 
 ## Deployment
 
-### Wymagania
+### Requirements
 - Node.js 18+
 - npm/yarn/pnpm
 - Next.js 15
 
-### Komendy
+### Commands
 ```bash
-# Instalacja
+# Installation
 npm install
 
 # Development
@@ -186,17 +186,17 @@ npm run build
 npm start
 ```
 
-### Platformy
-- Vercel (zalecane)
+### Platforms
+- Vercel (recommended)
 - Netlify
 - AWS
 - Docker
 
-## Przyszłe Rozszerzenia
+## Future Extensions
 
 ### Blockchain Integration
-- Minting tokenów za poziomy
-- NFT osiągnięcia
+- Token minting for levels
+- NFT achievements
 - DeFi staking
 - Social features
 

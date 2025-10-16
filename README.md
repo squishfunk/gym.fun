@@ -1,116 +1,116 @@
-# gym.fun - Mobilna Gra Clicker
+# gym.fun - Mobile Clicker Game
 
-Prosta aplikacja webowa w Next.js zoptymalizowana pod urządzenia mobilne. To clicker, w którym gracz klika przycisk "Pump" aby zdobywać punkty i awansować na wyższe poziomy.
+A simple Next.js web application optimized for mobile devices. It's a clicker game where players click the "Pump" button to earn points and advance to higher levels.
 
-## 🎮 Opis Gry
+## 🎮 Game Description
 
-- **Mechanika**: Klikaj przycisk "Pump" aby zdobywać +1 punkt XP
-- **System Leveli**: Każdy poziom wymaga więcej punktów (wzrost o 15% dla każdego kolejnego levelu)
-- **Decay System**: Punkty spadają w czasie (-0.5 XP/sekundę) - nie przestawaj pompować!
-- **Awans**: Po osiągnięciu wymaganych punktów gracz awansuje do następnego poziomu
+- **Mechanics**: Click the "Pump" button to earn +1 XP point
+- **Level System**: Each level requires more points (15% growth for each subsequent level)
+- **Decay System**: Points decrease over time (-0.5 XP/second) - keep pumping!
+- **Advancement**: After reaching required points, player advances to the next level
 
-## 🚀 Uruchomienie
+## 🚀 Getting Started
 
 ```bash
-# Zainstaluj zależności
+# Install dependencies
 npm install
 
-# Uruchom serwer deweloperski
+# Run development server
 npm run dev
 
-# Otwórz http://localhost:3000 w przeglądarce
+# Open http://localhost:3000 in browser
 ```
 
-## 📱 Funkcjonalności
+## 📱 Features
 
-### ✅ Zaimplementowane
-- **Interfejs mobilny** - zoptymalizowany pod telefony
-- **System leveli** z algorytmem wzrostu: `XP_n = baseXP * (1 + growthRate)^(n-1)`
-- **Pasek postępu** z animacjami
-- **Efekty wizualne** - animacje kliknięć i level up
-- **Liczniki** - aktualny level i punkty
-- **Responsywność** - działa na różnych rozmiarach ekranów
+### ✅ Implemented
+- **Mobile interface** - optimized for phones
+- **Level system** with growth algorithm: `XP_n = baseXP * (1 + growthRate)^(n-1)`
+- **Progress bar** with animations
+- **Visual effects** - click animations and level up
+- **Counters** - current level and points
+- **Responsiveness** - works on different screen sizes
 
-### 🔧 Konfiguracja
-- **BASE_XP**: 100 (bazowa ilość punktów dla pierwszego levelu)
-- **GROWTH_RATE**: 0.15 (15% wzrost dla każdego kolejnego levelu)
-- **DECAY_RATE**: 0.5 (punkty tracone na sekundę)
+### 🔧 Configuration
+- **BASE_XP**: 10 (base point amount for first level)
+- **GROWTH_RATE**: 0.15 (15% growth for each subsequent level)
+- **DECAY_RATE**: 0.5 (points lost per second)
 
-## 🎯 Mechanika Gry
+## 🎯 Game Mechanics
 
-1. **Kliknij "PUMP"** - zdobywasz +1 XP
-2. **Pasek postępu** - pokazuje postęp do następnego levelu
-3. **Decay** - punkty spadają w czasie, więc musisz ciągle klikać
-4. **Level Up** - po osiągnięciu wymaganych punktów awansujesz
-5. **Reset** - po 5 sekundach bez aktywności pasek resetuje się do zera
+1. **Click "PUMP"** - earn +1 XP
+2. **Progress bar** - shows progress to next level
+3. **Decay** - points decrease over time, so you must keep clicking
+4. **Level Up** - after reaching required points, you advance
+5. **Reset** - after 5 seconds of inactivity, bar resets to zero
 
-## 🛠 Technologie
+## 🛠 Technologies
 
 - **Next.js 15** - React framework
-- **TypeScript** - typowanie
-- **CSS Modules** - stylizacja
-- **Coinbase OnchainKit** - integracja z blockchain (przygotowane na przyszłość)
+- **TypeScript** - typing
+- **CSS Modules** - styling
+- **Coinbase OnchainKit** - blockchain integration (prepared for future)
 
-## 📁 Struktura Projektu
+## 📁 Project Structure
 
 ```
 app/
-├── page.tsx              # Główny komponent gry
-├── page.module.css       # Style CSS
+├── page.tsx              # Main game component
+├── page.module.css       # CSS styles
 ├── components/
-│   └── GameEffects.tsx    # Efekty wizualne
-├── types.d.ts            # Deklaracje typów
-└── globals.css           # Globalne style
+│   └── GameEffects.tsx    # Visual effects
+├── types.d.ts            # Type declarations
+└── globals.css           # Global styles
 ```
 
 ## 🎨 Design
 
-- **Gradient tło** - niebiesko-fioletowy
-- **Przycisk PUMP** - duży, okrągły, z animacjami
-- **Pasek postępu** - z efektem shimmer
-- **Animacje** - level up, zdobywanie XP, aktywność
-- **Responsywność** - dostosowany do różnych ekranów
+- **Gradient background** - blue-purple
+- **PUMP button** - large, round, with animations
+- **Progress bar** - with shimmer effect
+- **Animations** - level up, XP gain, activity
+- **Responsiveness** - adapted to different screens
 
-## 🔮 Przyszłe Rozszerzenia
+## 🔮 Future Extensions
 
-Projekt jest przygotowany do integracji z:
-- **Ethereum Layer2** - minting tokenów za poziomy
-- **NFT** - unikalne osiągnięcia
-- **DeFi** - staking i yield farming
-- **Social Features** - rankingi i wyzwania
+Project is prepared for integration with:
+- **Ethereum Layer2** - token minting for levels
+- **NFT** - unique achievements
+- **DeFi** - staking and yield farming
+- **Social Features** - rankings and challenges
 
 ## 🚀 Deployment
 
 ```bash
-# Build produkcyjny
+# Production build
 npm run build
 
-# Uruchom w trybie produkcyjnym
+# Run in production mode
 npm start
 ```
 
-Aplikacja jest gotowa do wdrożenia na Vercel, Netlify lub innych platformach hostingowych.
+Application is ready for deployment on Vercel, Netlify or other hosting platforms.
 
-## 📊 Algorytm Leveli
+## 📊 Level Algorithm
 
 ```typescript
-// Wzór na wymagane punkty dla levelu n:
+// Formula for required points for level n:
 XP_n = baseXP * (1 + growthRate)^(n-1)
 
-// Przykład:
-// Level 1: 100 XP
-// Level 2: 115 XP (100 * 1.15^1)
-// Level 3: 132 XP (100 * 1.15^2)
-// Level 4: 152 XP (100 * 1.15^3)
+// Example:
+// Level 1: 10 XP
+// Level 2: 12 XP (10 * 1.15^1)
+// Level 3: 13 XP (10 * 1.15^2)
+// Level 4: 15 XP (10 * 1.15^3)
 ```
 
-## 🎮 Jak Grać
+## 🎮 How to Play
 
-1. Otwórz aplikację na telefonie
-2. Klikaj duży przycisk "PUMP" na środku ekranu
-3. Obserwuj jak pasek postępu rośnie
-4. Nie przestawaj klikać - punkty spadają w czasie!
-5. Po osiągnięciu wymaganych punktów awansujesz do następnego levelu
-6. Każdy kolejny level wymaga więcej punktów
+1. Open the application on your phone
+2. Click the large "PUMP" button in the center of the screen
+3. Watch the progress bar grow
+4. Don't stop clicking - points decrease over time!
+5. After reaching required points, you advance to the next level
+6. Each subsequent level requires more points
 
-**Powodzenia w pompowaniu! 💪**
+**Good luck pumping! 💪**
