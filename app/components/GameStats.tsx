@@ -1,5 +1,5 @@
 "use client";
-import { GAME_CONFIG, calculateRequiredXP, calculateTokenReward, isEligibleForReward } from "../config/gameConfig";
+import { calculateRequiredXP } from "../config/gameConfig";
 import styles from "../page.module.css";
 
 interface GameStatsProps {
@@ -16,8 +16,6 @@ export default function GameStats({
   progressPercentage 
 }: GameStatsProps) {
   const nextLevelXP = calculateRequiredXP(currentLevel + 1);
-  const isEligible = isEligibleForReward(currentLevel);
-  const tokenReward = calculateTokenReward(currentLevel);
 
   return (
     <div className={styles.gameStats}>

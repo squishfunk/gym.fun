@@ -11,7 +11,7 @@ interface LeaderboardEntry {
 
 export default function LeaderboardTab() {
   const { state } = useGameContext();
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const { currentLevel, currentXP } = state;
 
   // Mock data - will be from blockchain in the future
@@ -47,7 +47,7 @@ export default function LeaderboardTab() {
       <div className={styles.leaderboardContainer}>
         {leaderboardData.length === 0 ? (
           <div className={styles.emptyLeaderboard}>
-            <p>There's no one here</p>
+            <p>There&apos;s no one here</p>
             <p className={styles.emptySubtext}>
               Be the first to share your score!
             </p>

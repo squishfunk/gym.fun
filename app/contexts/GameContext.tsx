@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { GAME_CONFIG, calculateRequiredXP, calculateTokenReward } from '../config/gameConfig';
-import { StoreItem, STORE_ITEMS } from '../config/storeConfig';
+import { STORE_ITEMS } from '../config/storeConfig';
 
 export interface GameState {
   currentLevel: number;

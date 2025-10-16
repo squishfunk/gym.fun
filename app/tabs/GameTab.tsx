@@ -10,7 +10,7 @@ import { base } from "viem/chains";
 
 export default function GameTab() {
   const { address } = useAccount();
-  const { data: name, isLoading: nameIsLoading } = useName({ address, chain: base });
+  const { data: name } = useName({ address, chain: base });
 
   // Use global game context
   const { state, actions } = useGameContext();
@@ -19,12 +19,11 @@ export default function GameTab() {
     currentXP,
     isPlaying,
     showLevelUp,
-    tokenReward,
     requiredXP,
     progressPercentage,
   } = state;
 
-  const { handlePump, handleLevelUp } = actions;
+  const { handlePump } = actions;
 
   return (
     <>

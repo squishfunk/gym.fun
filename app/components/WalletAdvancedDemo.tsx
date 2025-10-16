@@ -11,8 +11,8 @@ import { useAccount } from 'wagmi';
 
   
 export default function WalletAdvancedDemo() {
-    const { address, isConnected } = useAccount();
-    console.log(name);
+    const { address: _address, isConnected: _isConnected } = useAccount();
+    // console.log(name);
 
     return (
         <>
