@@ -5,10 +5,9 @@ import styles from '../page.module.css';
 interface GameEffectsProps {
   isPlaying: boolean;
   currentXP: number;
-  onLevelUp: () => void;
 }
 
-export default function GameEffects({ isPlaying, currentXP, onLevelUp }: GameEffectsProps) {
+export default function GameEffects({ isPlaying, currentXP }: GameEffectsProps) {
   const [showXPAnimation, setShowXPAnimation] = useState(false);
   const [lastXP, setLastXP] = useState(0);
 
@@ -20,13 +19,6 @@ export default function GameEffects({ isPlaying, currentXP, onLevelUp }: GameEff
     }
     setLastXP(currentXP);
   }, [currentXP, lastXP]);
-
-  // Efekt wizualny dla level up
-  useEffect(() => {
-    if (currentXP === 0 && lastXP > 0) {
-      onLevelUp();
-    }
-  }, [currentXP, lastXP, onLevelUp]);
 
   return (
     <>

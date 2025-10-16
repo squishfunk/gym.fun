@@ -23,6 +23,7 @@ export function useGameState() {
   const [lastClickTime, setLastClickTime] = useState<number | null>(null);
   const [showLevelUp, setShowLevelUp] = useState(false);
   const [tokenReward, setTokenReward] = useState(0);
+  const [previousLevel, setPreviousLevel] = useState(1);
 
   // Oblicz wymagane punkty dla aktualnego levelu
   const requiredXP = calculateRequiredXP(currentLevel);
@@ -61,6 +62,18 @@ export function useGameState() {
     return () => clearTimeout(timeout);
   }, [lastClickTime]);
 
+  // Obsługa level up
+  const handleLevelUp = useCallback(() => {
+    setShowLevelUp(true);
+    setTimeout(() => setShowLevelUp(false), GAME_CONFIG.ANIMATION_DURATION);
+    
+    // Sprawdź czy gracz kwalifikuje się do nagrody tokenowej
+    const reward = calculateTokenReward(currentLevel);
+    if (reward > 0) {
+      setTokenReward(reward);
+    }
+  }, [currentLevel]);
+
   // Obsługa kliknięcia przycisku
   const handlePump = useCallback(() => {
     setCurrentXP((prevXP: number) => {
@@ -79,17 +92,13 @@ export function useGameState() {
     setIsPlaying(true);
   }, [requiredXP]);
 
-  // Obsługa level up
-  const handleLevelUp = useCallback(() => {
-    setShowLevelUp(true);
-    setTimeout(() => setShowLevelUp(false), GAME_CONFIG.ANIMATION_DURATION);
-    
-    // Sprawdź czy gracz kwalifikuje się do nagrody tokenowej
-    const reward = calculateTokenReward(currentLevel);
-    if (reward > 0) {
-      setTokenReward(reward);
+  // Efekt do wykrywania zmiany levelu i wywołania level up
+  useEffect(() => {
+    if (currentLevel > previousLevel) {
+      setPreviousLevel(currentLevel);
+      handleLevelUp();
     }
-  }, [currentLevel]);
+  }, [currentLevel, previousLevel, handleLevelUp]);
 
   // Reset gry
   const resetGame = useCallback(() => {
@@ -99,6 +108,7 @@ export function useGameState() {
     setLastClickTime(null);
     setShowLevelUp(false);
     setTokenReward(0);
+    setPreviousLevel(1);
   }, []);
 
   return {

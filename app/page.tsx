@@ -71,7 +71,6 @@ export default function Home() {
         <GameEffects 
           isPlaying={isPlaying}
           currentXP={currentXP}
-          onLevelUp={handleLevelUp}
         />
         
         {/* Animacja level up */}
