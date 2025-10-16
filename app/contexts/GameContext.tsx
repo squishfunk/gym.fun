@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+"use client";
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { GAME_CONFIG, calculateRequiredXP, calculateTokenReward } from '../config/gameConfig';
 
 export interface GameState {
@@ -16,7 +17,30 @@ export interface GameActions {
   resetGame: () => void;
 }
 
-export function useGameState() {
+interface GameContextType {
+  state: GameState & {
+    requiredXP: number;
+    progressPercentage: number;
+  };
+  actions: GameActions;
+}
+
+const GameContext = createContext<GameContextType | undefined>(undefined);
+
+// Hook do używania kontekstu
+export function useGameContext() {
+  const context = useContext(GameContext);
+  if (context === undefined) {
+    throw new Error('useGameContext must be used within a GameProvider');
+  }
+  return context;
+}
+
+interface GameProviderProps {
+  children: ReactNode;
+}
+
+export function GameProvider({ children }: GameProviderProps) {
   const [currentLevel, setCurrentLevel] = useState(1);
   const [currentXP, setCurrentXP] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -24,6 +48,30 @@ export function useGameState() {
   const [showLevelUp, setShowLevelUp] = useState(false);
   const [tokenReward, setTokenReward] = useState(0);
   const [previousLevel, setPreviousLevel] = useState(1);
+
+  // Load state from localStorage on mount
+  useEffect(() => {
+    const savedState = localStorage.getItem('gym-game-state');
+    if (savedState) {
+      try {
+        const parsed = JSON.parse(savedState);
+        setCurrentLevel(parsed.currentLevel || 1);
+        setCurrentXP(parsed.currentXP || 0);
+        setPreviousLevel(parsed.currentLevel || 1);
+      } catch (error) {
+        console.error('Error loading game state:', error);
+      }
+    }
+  }, []);
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    const stateToSave = {
+      currentLevel,
+      currentXP,
+    };
+    localStorage.setItem('gym-game-state', JSON.stringify(stateToSave));
+  }, [currentLevel, currentXP]);
 
   // Calculate required points for current level
   const requiredXP = calculateRequiredXP(currentLevel);
@@ -36,13 +84,6 @@ export function useGameState() {
     const interval = setInterval(() => {
       setCurrentXP((prevXP: number) => {
         const newXP = Math.max(0, prevXP - GAME_CONFIG.DECAY_RATE);
-        
-        // Check if player advanced to next level
-        // if (newXP >= requiredXP) {
-        //   setCurrentLevel((prevLevel: number) => prevLevel + 1);
-        //   return 0; // Reset bar after advancement
-        // }
-        
         return newXP;
       });
     }, GAME_CONFIG.DECAY_INTERVAL);
@@ -78,8 +119,6 @@ export function useGameState() {
   const handlePump = useCallback(() => {
     setCurrentXP((prevXP: number) => {
       const newXP = prevXP + 1;
-      
-      // Just add XP, let useEffect handle level up
       return newXP;
     });
     
@@ -112,9 +151,10 @@ export function useGameState() {
     setShowLevelUp(false);
     setTokenReward(0);
     setPreviousLevel(1);
+    localStorage.removeItem('gym-game-state');
   }, []);
 
-  return {
+  const contextValue: GameContextType = {
     state: {
       currentLevel,
       currentXP,
@@ -131,4 +171,10 @@ export function useGameState() {
       resetGame,
     },
   };
+
+  return (
+    <GameContext.Provider value={contextValue}>
+      {children}
+    </GameContext.Provider>
+  );
 }
