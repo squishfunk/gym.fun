@@ -42,12 +42,6 @@ export default function GameStats({
           <span className={styles.statValue}>{nextLevelXP} XP</span>
         </div>
       </div>
-      
-      {isEligible && (
-        <div className={styles.rewardNotification}>
-          🎁 Reward for level {currentLevel}: {tokenReward} {GAME_CONFIG.BLOCKCHAIN.TOKEN_SYMBOL}
-        </div>
-      )}
     </div>
   );
 }
