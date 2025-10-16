@@ -1,4 +1,4 @@
-/* Główny kontener - zoptymalizowany pod urządzenia mobilne */
+/* Main container - optimized for mobile devices */
 .container {
   display: flex;
   flex-direction: column;
@@ -113,7 +113,7 @@
   font-weight: 600;
 }
 
-/* Pasek postępu */
+/* Progress bar */
 .progressContainer {
   margin-bottom: 2rem;
   padding: 0 1rem;
@@ -275,7 +275,7 @@
   }
 }
 
-/* Responsywność dla większych ekranów */
+/* Responsiveness for larger screens */
 @media (min-width: 768px) {
   .container {
     max-width: 500px;
@@ -343,7 +343,7 @@
   }
 }
 
-/* Efekty wizualne dla aktywności */
+/* Visual effects for activity */
 .activityIndicator {
   position: absolute;
   top: 50%;
@@ -447,4 +447,328 @@
   text-align: center;
   box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
   animation: rewardGlow 2s infinite;
+}
+
+/* Store Styles */
+.storeHeader {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.storeHeader h1 {
+  color: white;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.tokensInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.tokenBalance {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  backdrop-filter: blur(10px);
+}
+
+.multiplierInfo {
+  background: rgba(34, 197, 94, 0.3);
+  padding: 0.4rem 0.8rem;
+  border-radius: 15px;
+  color: white;
+  font-size: 0.9rem;
+  border: 1px solid rgba(34, 197, 94, 0.5);
+}
+
+.storeItems {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.storeItem {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 1rem;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.storeItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.ownedItem {
+  border-color: rgba(34, 197, 94, 0.5) !important;
+  background: rgba(34, 197, 94, 0.1);
+}
+
+.itemHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.itemIcon {
+  font-size: 2rem;
+  min-width: 3rem;
+  text-align: center;
+}
+
+.itemInfo {
+  flex: 1;
+}
+
+.itemName {
+  color: white;
+  font-size: 1.2rem;
+  margin: 0 0 0.3rem 0;
+  font-weight: bold;
+}
+
+.itemDescription {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.itemPrice {
+  color: #fbbf24;
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.itemActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.buyButton {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.buyButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.disabledButton {
+  background: rgba(107, 114, 128, 0.5);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.disabledButton:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.ownedActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+}
+
+.ownedText {
+  color: #10b981;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.sellButton {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sellButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+}
+
+.storeInfo {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.storeInfo p {
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0.3rem 0;
+  font-size: 0.9rem;
+}
+
+/* Leaderboard Styles */
+.leaderboardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.leaderboardHeader h1 {
+  color: white;
+  font-size: 1.8rem;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.shareButton {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.shareButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+.leaderboardContainer {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.emptyLeaderboard {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.emptyLeaderboard p {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.emptySubtext {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-size: 0.9rem !important;
+}
+
+.leaderboardTable {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 60px 1fr 100px 80px;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 60px 1fr 100px 80px;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  align-items: center;
+}
+
+.tableRow:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
+}
+
+.rank {
+  font-weight: bold;
+  color: #fbbf24;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.address {
+  color: white;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.level {
+  color: #10b981;
+  font-weight: bold;
+  text-align: center;
+}
+
+.xp {
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.currentScore {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.currentScore h3 {
+  color: white;
+  margin: 0 0 0.8rem 0;
+  font-size: 1.1rem;
+}
+
+.scoreInfo {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.scoreInfo span {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
 }

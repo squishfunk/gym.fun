@@ -1,6 +1,7 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { GAME_CONFIG, calculateRequiredXP, calculateTokenReward } from '../config/gameConfig';
+import { StoreItem, STORE_ITEMS } from '../config/storeConfig';
 
 export interface GameState {
   currentLevel: number;
@@ -9,12 +10,17 @@ export interface GameState {
   lastClickTime: number | null;
   showLevelUp: boolean;
   tokenReward: number;
+  gymTokens: number;
+  ownedItems: string[]; // IDs of owned items
+  clickMultiplier: number; // Total click multiplier from items
 }
 
 export interface GameActions {
   handlePump: () => void;
   handleLevelUp: () => void;
   resetGame: () => void;
+  buyItem: (itemId: string) => boolean;
+  sellItem: (itemId: string) => boolean;
 }
 
 interface GameContextType {
@@ -27,7 +33,7 @@ interface GameContextType {
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
-// Hook do używania kontekstu
+// Hook for using the context
 export function useGameContext() {
   const context = useContext(GameContext);
   if (context === undefined) {
@@ -48,6 +54,9 @@ export function GameProvider({ children }: GameProviderProps) {
   const [showLevelUp, setShowLevelUp] = useState(false);
   const [tokenReward, setTokenReward] = useState(0);
   const [previousLevel, setPreviousLevel] = useState(1);
+  const [gymTokens, setGymTokens] = useState(0);
+  const [ownedItems, setOwnedItems] = useState<string[]>([]);
+  const [clickMultiplier, setClickMultiplier] = useState(0);
 
   // Load state from localStorage on mount
   useEffect(() => {
@@ -58,6 +67,8 @@ export function GameProvider({ children }: GameProviderProps) {
         setCurrentLevel(parsed.currentLevel || 1);
         setCurrentXP(parsed.currentXP || 0);
         setPreviousLevel(parsed.currentLevel || 1);
+        setGymTokens(parsed.gymTokens || 0);
+        setOwnedItems(parsed.ownedItems || []);
       } catch (error) {
         console.error('Error loading game state:', error);
       }
@@ -69,13 +80,27 @@ export function GameProvider({ children }: GameProviderProps) {
     const stateToSave = {
       currentLevel,
       currentXP,
+      gymTokens,
+      ownedItems,
     };
     localStorage.setItem('gym-game-state', JSON.stringify(stateToSave));
-  }, [currentLevel, currentXP]);
+  }, [currentLevel, currentXP, gymTokens, ownedItems]);
 
   // Calculate required points for current level
   const requiredXP = calculateRequiredXP(currentLevel);
   const progressPercentage = Math.min((currentXP / requiredXP) * 100, 100);
+
+  // Calculate click multiplier from owned items
+  useEffect(() => {
+    const totalMultiplier = ownedItems.reduce((total, itemId) => {
+      const item = STORE_ITEMS.find(storeItem => storeItem.id === itemId);
+      if (item && item.effect.type === 'click_multiplier') {
+        return total + item.effect.value;
+      }
+      return total;
+    }, 0);
+    setClickMultiplier(totalMultiplier);
+  }, [ownedItems]);
 
   // Effect to handle point decay over time
   useEffect(() => {
@@ -108,6 +133,10 @@ export function GameProvider({ children }: GameProviderProps) {
     setShowLevelUp(true);
     setTimeout(() => setShowLevelUp(false), GAME_CONFIG.ANIMATION_DURATION);
     
+    // Give GYM tokens for leveling up
+    const tokensEarned = currentLevel * 5; // 5 tokens per level
+    setGymTokens(prev => prev + tokensEarned);
+    
     // Check if player qualifies for token reward
     const reward = calculateTokenReward(currentLevel);
     if (reward > 0) {
@@ -118,13 +147,14 @@ export function GameProvider({ children }: GameProviderProps) {
   // Handle button click
   const handlePump = useCallback(() => {
     setCurrentXP((prevXP: number) => {
-      const newXP = prevXP + 1;
-      return newXP;
+      const baseXP = 1;
+      const totalXP = baseXP + clickMultiplier;
+      return prevXP + totalXP;
     });
     
     setLastClickTime(Date.now());
     setIsPlaying(true);
-  }, []);
+  }, [clickMultiplier]);
 
   // Effect to detect level change and trigger level up
   useEffect(() => {
@@ -142,6 +172,39 @@ export function GameProvider({ children }: GameProviderProps) {
     }
   }, [currentXP, requiredXP]);
 
+  // Store functions
+  const buyItem = useCallback((itemId: string) => {
+    const item = STORE_ITEMS.find(storeItem => storeItem.id === itemId);
+    if (!item) {
+      return false; // Item not found
+    }
+    
+    if (gymTokens < item.price) {
+      return false; // Not enough tokens
+    }
+    
+    setGymTokens(prev => prev - item.price);
+    setOwnedItems(prev => [...prev, itemId]);
+    return true;
+  }, [gymTokens]);
+
+  const sellItem = useCallback((itemId: string) => {
+    if (!ownedItems.includes(itemId)) {
+      return false; // Item not owned
+    }
+    
+    const item = STORE_ITEMS.find(storeItem => storeItem.id === itemId);
+    if (!item) {
+      return false; // Item not found
+    }
+    
+    const sellPrice = Math.floor(item.price / 2); // Half price when selling
+    
+    setGymTokens(prev => prev + sellPrice);
+    setOwnedItems(prev => prev.filter(id => id !== itemId));
+    return true;
+  }, [ownedItems]);
+
   // Reset game
   const resetGame = useCallback(() => {
     setCurrentLevel(1);
@@ -151,6 +214,9 @@ export function GameProvider({ children }: GameProviderProps) {
     setShowLevelUp(false);
     setTokenReward(0);
     setPreviousLevel(1);
+    setGymTokens(0);
+    setOwnedItems([]);
+    setClickMultiplier(0);
     localStorage.removeItem('gym-game-state');
   }, []);
 
@@ -162,6 +228,9 @@ export function GameProvider({ children }: GameProviderProps) {
       lastClickTime,
       showLevelUp,
       tokenReward,
+      gymTokens,
+      ownedItems,
+      clickMultiplier,
       requiredXP,
       progressPercentage,
     },
@@ -169,6 +238,8 @@ export function GameProvider({ children }: GameProviderProps) {
       handlePump,
       handleLevelUp,
       resetGame,
+      buyItem,
+      sellItem,
     },
   };
 

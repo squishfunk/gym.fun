@@ -4,6 +4,7 @@ import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import GameTab from "./tabs/GameTab";
 import StoreTab from "./tabs/StoreTab";
 import SettingsTab from "./tabs/SettingsTab";
+import LeaderboardTab from "./tabs/LeaderboardTab";
 import { GameProvider } from "./contexts/GameContext";
 import styles from "./page.module.css";
 
@@ -11,7 +12,7 @@ export default function Home() {
   const { setMiniAppReady, isMiniAppReady } = useMiniKit();
   
   // Tab state
-  const [activeTab, setActiveTab] = useState<'store' | 'game' | 'settings'>('game');
+  const [activeTab, setActiveTab] = useState<'store' | 'game' | 'leaderboard' | 'settings'>('game');
 
   const tabs = [
     {
@@ -23,6 +24,11 @@ export default function Home() {
       label: 'game',
       component: <GameTab />,
       icon: '🎮'
+    },
+    {
+      label: 'leaderboard',
+      component: <LeaderboardTab />,
+      icon: '🏆'
     },
     {
       label: 'settings',
@@ -47,7 +53,7 @@ export default function Home() {
             <button 
               key={tab.label}
               className={`${styles.tabButton} ${activeTab === tab.label ? styles.tabButtonActive : ''}`}
-              onClick={() => setActiveTab(tab.label as 'store' | 'game' | 'settings')}
+              onClick={() => setActiveTab(tab.label as 'store' | 'game' | 'leaderboard' | 'settings')}
             >
               {tab.icon}
             </button>

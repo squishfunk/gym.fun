@@ -1,4 +1,4 @@
-// Deklaracje typów dla gym.fun
+// Type declarations for gym.fun
 declare module '*.module.css' {
   const classes: { [key: string]: string };
   export default classes;
