@@ -7,6 +7,7 @@ import styles from "../page.module.css";
 import { useName } from "@coinbase/onchainkit/identity";
 import { useAccount } from "wagmi";
 import { base } from "viem/chains";
+import CountUp from "../../components/CountUp";
 
 export default function GameTab() {
   const { address } = useAccount();
@@ -33,7 +34,13 @@ export default function GameTab() {
           <h1 className={styles.title}>{name || address && `${address?.slice(0, 6)}...${address?.slice(-4)}` || 'Guest'}</h1>
           <div className={styles.stats}>
             <span className={styles.level}>Level {currentLevel}</span>
-            <span className={styles.xp}>{currentXP}/{requiredXP} XP</span>
+            <span className={styles.xp}><CountUp
+  to={currentXP}
+  separator=","
+  direction="up"
+  duration={0.01}
+  className="count-up-text"
+/>/{requiredXP} XP</span>
           </div>
         </div>
       </header>

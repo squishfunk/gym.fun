@@ -1,6 +1,7 @@
 "use client";
 import { calculateRequiredXP } from "../config/gameConfig";
 import styles from "../page.module.css";
+import CountUp from "../../components/CountUp";
 
 interface GameStatsProps {
   currentLevel: number;
@@ -27,12 +28,24 @@ export default function GameStats({
         
         <div className={styles.statItem}>
           <span className={styles.statLabel}>XP</span>
-          <span className={styles.statValue}>{currentXP}/{requiredXP}</span>
+          <span className={styles.statValue}><CountUp
+  to={currentXP}
+  separator=","
+  direction="up"
+  duration={0.01}
+  className="count-up-text"
+/>/{requiredXP}</span>
         </div>
         
         <div className={styles.statItem}>
           <span className={styles.statLabel}>Progress</span>
-          <span className={styles.statValue}>{Math.round(progressPercentage)}%</span>
+          <span className={styles.statValue}><CountUp
+  to={Math.round(progressPercentage)}
+  separator=","
+  direction="up"
+  duration={0.01}
+  className="count-up-text"
+/>%</span>
         </div>
         
         <div className={styles.statItem}>

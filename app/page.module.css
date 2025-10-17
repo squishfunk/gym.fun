@@ -737,9 +737,12 @@
 }
 
 .xp {
+  font-family: monospace; 
   color: rgba(255, 255, 255, 0.8);
   text-align: center;
   font-size: 0.9rem;
+  display: inline-block; 
+  width: 22ch;   
 }
 
 .currentScore {
