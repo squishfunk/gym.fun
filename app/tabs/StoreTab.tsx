@@ -89,9 +89,9 @@ export default function StoreTab() {
       </div>
 
       <div className={styles.storeInfo}>
-        <p>💡 Tip: Items increase XP per click!</p>
-        <p>🔄 You can sell items for half the price</p>
-        <p>📈 Prices increase by 15% with each purchase!</p>
+        <p>Items increase your XP per click!</p>
+        <p>You can sell items for half the price</p>
+        <p>Prices increase by 15% with each purchase!</p>
       </div>
     </div>
   );

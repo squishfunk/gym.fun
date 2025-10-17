@@ -58,7 +58,7 @@ export function GameProvider({ children }: GameProviderProps) {
   const [previousLevel, setPreviousLevel] = useState(1);
   const [gymTokens, setGymTokens] = useState(0);
   const [ownedItems, setOwnedItems] = useState<string[]>([]);
-  const [clickMultiplier, setClickMultiplier] = useState(0);
+  const [clickMultiplier, setClickMultiplier] = useState(1);
   const [itemPrices, setItemPrices] = useState<Record<string, number>>({});
 
   // Initialize item prices with base prices
@@ -161,9 +161,7 @@ export function GameProvider({ children }: GameProviderProps) {
   // Handle button click
   const handlePump = useCallback(() => {
     setCurrentXP((prevXP: number) => {
-      const baseXP = 1;
-      const totalXP = baseXP + clickMultiplier;
-      return prevXP + totalXP;
+      return prevXP + clickMultiplier;
     });
     
     setLastClickTime(Date.now());
