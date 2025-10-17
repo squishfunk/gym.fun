@@ -13,6 +13,7 @@ export interface GameState {
   gymTokens: number;
   ownedItems: string[]; // IDs of owned items
   clickMultiplier: number; // Total click multiplier from items
+  itemPrices: Record<string, number>; // Dynamic prices for each item
 }
 
 export interface GameActions {
@@ -21,6 +22,7 @@ export interface GameActions {
   resetGame: () => void;
   buyItem: (itemId: string) => boolean;
   sellItem: (itemId: string) => boolean;
+  getItemPrice: (itemId: string) => number;
 }
 
 interface GameContextType {
@@ -57,6 +59,16 @@ export function GameProvider({ children }: GameProviderProps) {
   const [gymTokens, setGymTokens] = useState(0);
   const [ownedItems, setOwnedItems] = useState<string[]>([]);
   const [clickMultiplier, setClickMultiplier] = useState(0);
+  const [itemPrices, setItemPrices] = useState<Record<string, number>>({});
+
+  // Initialize item prices with base prices
+  useEffect(() => {
+    const initialPrices: Record<string, number> = {};
+    STORE_ITEMS.forEach(item => {
+      initialPrices[item.id] = item.price;
+    });
+    setItemPrices(initialPrices);
+  }, []);
 
   // Load state from localStorage on mount
   useEffect(() => {
@@ -69,6 +81,7 @@ export function GameProvider({ children }: GameProviderProps) {
         setPreviousLevel(parsed.currentLevel || 1);
         setGymTokens(parsed.gymTokens || 0);
         setOwnedItems(parsed.ownedItems || []);
+        setItemPrices(parsed.itemPrices || {});
       } catch (error) {
         console.error('Error loading game state:', error);
       }
@@ -82,9 +95,10 @@ export function GameProvider({ children }: GameProviderProps) {
       currentXP,
       gymTokens,
       ownedItems,
+      itemPrices,
     };
     localStorage.setItem('gym-game-state', JSON.stringify(stateToSave));
-  }, [currentLevel, currentXP, gymTokens, ownedItems]);
+  }, [currentLevel, currentXP, gymTokens, ownedItems, itemPrices]);
 
   // Calculate required points for current level
   const requiredXP = calculateRequiredXP(currentLevel);
@@ -173,20 +187,28 @@ export function GameProvider({ children }: GameProviderProps) {
   }, [currentXP, requiredXP]);
 
   // Store functions
+  const getItemPrice = useCallback((itemId: string) => {
+    return itemPrices[itemId] || STORE_ITEMS.find(item => item.id === itemId)?.price || 0;
+  }, [itemPrices]);
+
   const buyItem = useCallback((itemId: string) => {
-    const item = STORE_ITEMS.find(storeItem => storeItem.id === itemId);
-    if (!item) {
-      return false; // Item not found
-    }
-    
-    if (gymTokens < item.price) {
+    const currentPrice = getItemPrice(itemId);
+    if (gymTokens < currentPrice) {
       return false; // Not enough tokens
     }
     
-    setGymTokens(prev => prev - item.price);
+    setGymTokens(prev => prev - currentPrice);
     setOwnedItems(prev => [...prev, itemId]);
+    
+    // Increase price by 15% for next purchase
+    setItemPrices(prev => ({
+      ...prev,
+      [itemId]: Math.floor(prev[itemId] * 1.15)
+    }));
+    
     return true;
-  }, [gymTokens]);
+  }, [gymTokens, getItemPrice]);
+
 
   const sellItem = useCallback((itemId: string) => {
     if (!ownedItems.includes(itemId)) {
@@ -198,12 +220,12 @@ export function GameProvider({ children }: GameProviderProps) {
       return false; // Item not found
     }
     
-    const sellPrice = Math.floor(item.price / 2); // Half price when selling
+    const sellPrice = Math.floor(getItemPrice(itemId) / 2); // Half of current price when selling
     
     setGymTokens(prev => prev + sellPrice);
-    setOwnedItems(prev => prev.filter(id => id !== itemId));
+    setOwnedItems(prev => prev.toSpliced(prev.indexOf(itemId), 1));
     return true;
-  }, [ownedItems]);
+  }, [ownedItems, getItemPrice]);
 
   // Reset game
   const resetGame = useCallback(() => {
@@ -217,6 +239,7 @@ export function GameProvider({ children }: GameProviderProps) {
     setGymTokens(0);
     setOwnedItems([]);
     setClickMultiplier(0);
+    setItemPrices({});
     localStorage.removeItem('gym-game-state');
   }, []);
 
@@ -231,6 +254,7 @@ export function GameProvider({ children }: GameProviderProps) {
       gymTokens,
       ownedItems,
       clickMultiplier,
+      itemPrices,
       requiredXP,
       progressPercentage,
     },
@@ -240,6 +264,7 @@ export function GameProvider({ children }: GameProviderProps) {
       resetGame,
       buyItem,
       sellItem,
+      getItemPrice,
     },
   };
 

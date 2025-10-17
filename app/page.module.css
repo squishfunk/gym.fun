@@ -55,7 +55,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   padding: 2rem;
   text-align: center;
 }
@@ -502,11 +501,6 @@
   transition: all 0.3s ease;
 }
 
-.storeItem:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-}
-
 .ownedItem {
   border-color: rgba(34, 197, 94, 0.5) !important;
   background: rgba(34, 197, 94, 0.1);
@@ -549,46 +543,40 @@
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
+.itemCounter {
+  margin-bottom: 8px;
+}
+
 .itemActions {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 0.5rem;
 }
 
 .buyButton {
   background: linear-gradient(135deg, #10b981, #059669);
   color: white;
   border: none;
-  padding: 0.7rem 1.5rem;
+  padding: 0.5rem 1rem;
   border-radius: 10px;
   font-weight: bold;
+  font-size: 0.75rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  flex: 1;
 }
 
 .buyButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
 .disabledButton {
-  background: rgba(107, 114, 128, 0.5);
+  background: rgba(255, 255, 255, 0.2);
   cursor: not-allowed;
-  box-shadow: none;
 }
 
 .disabledButton:hover {
   transform: none;
   box-shadow: none;
-}
-
-.ownedActions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: center;
-  width: 100%;
 }
 
 .ownedText {
@@ -602,10 +590,12 @@
   color: white;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.8rem;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.3s ease;
+  flex: 1;
 }
 
 .sellButton:hover {
@@ -625,6 +615,13 @@
   color: rgba(255, 255, 255, 0.8);
   margin: 0.3rem 0;
   font-size: 0.9rem;
+}
+
+/* Price increase indicator */
+.priceIncrease {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-left: 0.5rem;
 }
 
 /* Leaderboard Styles */

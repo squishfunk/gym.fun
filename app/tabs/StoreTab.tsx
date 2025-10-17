@@ -6,7 +6,7 @@ import styles from "../page.module.css";
 export default function StoreTab() {
   const { state, actions } = useGameContext();
   const { gymTokens, ownedItems, clickMultiplier } = state;
-  const { buyItem, sellItem } = actions;
+  const { buyItem, sellItem, getItemPrice } = actions;
 
   const handleBuy = (itemId: string) => {
     const success = buyItem(itemId);
@@ -42,6 +42,7 @@ export default function StoreTab() {
         {STORE_ITEMS.map((item) => {
           const isOwned = ownedItems.includes(item.id);
           const ownedCount = ownedItems.filter(id => id === item.id).length;
+          const currentPrice = getItemPrice(item.id);
           
           return (
             <div 
@@ -55,33 +56,32 @@ export default function StoreTab() {
                   <h3 className={styles.itemName}>{item.name}</h3>
                   <p className={styles.itemDescription}>{item.description}</p>
                 </div>
-                <div className={styles.itemPrice}>
-                  {item.price} GYM
-                </div>
               </div>
-              
+
+
+              {isOwned && (
+                <div className={styles.itemCounter}>
+                  <span>
+                    ✅ Owned ({ownedCount}x)
+                  </span>
+                </div>
+              )}
               <div className={styles.itemActions}>
-                {isOwned ? (
-                  <div className={styles.ownedActions}>
-                    <span className={styles.ownedText}>
-                      ✅ Owned ({ownedCount}x)
-                    </span>
-                    <button 
-                      className={styles.sellButton}
-                      onClick={() => handleSell(item.id)}
-                    >
-                      Sell for {Math.floor(item.price / 2)} GYM
-                    </button>
-                  </div>
-                ) : (
+                <button 
+                  className={`${styles.buyButton} ${gymTokens < currentPrice ? styles.disabledButton : ''}`}
+                  onClick={() => handleBuy(item.id)}
+                  disabled={gymTokens < currentPrice}
+                >
+                  {gymTokens < currentPrice ? 'Not enough tokens' : 'Buy'} for {currentPrice} GYM
+                </button>
+                {isOwned && (
                   <button 
-                    className={`${styles.buyButton} ${gymTokens < item.price ? styles.disabledButton : ''}`}
-                    onClick={() => handleBuy(item.id)}
-                    disabled={gymTokens < item.price}
+                    className={styles.sellButton}
+                    onClick={() => handleSell(item.id)}
                   >
-                    {gymTokens < item.price ? 'Not enough tokens' : 'Buy'}
+                    Sell for {Math.floor(currentPrice / 2)} GYM
                   </button>
-                )}
+                ) }
               </div>
             </div>
           );
@@ -91,6 +91,7 @@ export default function StoreTab() {
       <div className={styles.storeInfo}>
         <p>💡 Tip: Items increase XP per click!</p>
         <p>🔄 You can sell items for half the price</p>
+        <p>📈 Prices increase by 15% with each purchase!</p>
       </div>
     </div>
   );
