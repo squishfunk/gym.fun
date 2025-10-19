@@ -112,7 +112,7 @@ export function GameProvider({ children }: GameProviderProps) {
         return total + item.effect.value;
       }
       return total;
-    }, 0);
+    }, 1); // Start with base multiplier of 1
     setClickMultiplier(totalMultiplier);
   }, [ownedItems]);
 
@@ -160,8 +160,11 @@ export function GameProvider({ children }: GameProviderProps) {
 
   // Handle button click
   const handlePump = useCallback(() => {
+    console.log('handlePump called, clickMultiplier:', clickMultiplier);
     setCurrentXP((prevXP: number) => {
-      return prevXP + clickMultiplier;
+      const newXP = prevXP + clickMultiplier;
+      console.log('XP update:', prevXP, '->', newXP);
+      return newXP;
     });
     
     setLastClickTime(Date.now());
@@ -236,7 +239,7 @@ export function GameProvider({ children }: GameProviderProps) {
     setPreviousLevel(1);
     setGymTokens(0);
     setOwnedItems([]);
-    setClickMultiplier(0);
+    setClickMultiplier(1);
     setItemPrices({});
     localStorage.removeItem('gym-game-state');
   }, []);

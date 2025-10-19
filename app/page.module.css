@@ -691,7 +691,7 @@
 
 .tableHeader {
   display: grid;
-  grid-template-columns: 60px 1fr 100px 80px;
+  grid-template-columns: 60px 1fr 100px;
   gap: 1rem;
   padding: 0.8rem 1rem;
   background: rgba(255, 255, 255, 0.1);
@@ -703,7 +703,7 @@
 
 .tableRow {
   display: grid;
-  grid-template-columns: 60px 1fr 100px 80px;
+  grid-template-columns: 60px 1fr 100px;
   gap: 1rem;
   padding: 0.8rem 1rem;
   background: rgba(255, 255, 255, 0.05);
@@ -772,4 +772,42 @@
   color: white;
   font-weight: bold;
   font-size: 0.9rem;
+}
+
+/* Leaderboard Actions */
+.leaderboardActions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.refreshButton {
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.refreshButton:hover:not(:disabled) {
+  background: #e0e0e0;
+  transform: translateY(-1px);
+}
+
+.refreshButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.errorMessage {
+  background: #fee;
+  border: 1px solid #fcc;
+  color: #c33;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 10px;
+  text-align: center;
 }

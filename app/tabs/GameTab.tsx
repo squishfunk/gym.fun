@@ -8,10 +8,15 @@ import { useName } from "@coinbase/onchainkit/identity";
 import { useAccount } from "wagmi";
 import { base } from "viem/chains";
 import CountUp from "../../components/CountUp";
+import { useState, useEffect } from "react";
 
 export default function GameTab() {
   const { address } = useAccount();
   const { data: name } = useName({ address, chain: base });
+  
+  // State to handle hydration mismatch
+  const [displayName, setDisplayName] = useState('Guest');
+  const [isClient, setIsClient] = useState(false);
 
   // Use global game context
   const { state, actions } = useGameContext();
@@ -26,21 +31,32 @@ export default function GameTab() {
 
   const { handlePump } = actions;
 
+  // Debug logging
+  useEffect(() => {
+    console.log('GameTab - currentXP:', currentXP, 'requiredXP:', requiredXP);
+  }, [currentXP, requiredXP]);
+
+  // Handle client-side hydration
+  useEffect(() => {
+    setIsClient(true);
+    if (name) {
+      setDisplayName(name);
+    } else if (address) {
+      setDisplayName(`${address.slice(0, 6)}...${address.slice(-4)}`);
+    } else {
+      setDisplayName('Guest');
+    }
+  }, [name, address]);
+
   return (
     <>
       {/* Header with level information */}
       <header className={styles.header}>
         <div className={styles.levelInfo}>
-          <h1 className={styles.title}>{name || address && `${address?.slice(0, 6)}...${address?.slice(-4)}` || 'Guest'}</h1>
+          <h1 className={styles.title}>{isClient ? displayName : 'Guest'}</h1>
           <div className={styles.stats}>
             <span className={styles.level}>Level {currentLevel}</span>
-            <span className={styles.xp}><CountUp
-  to={currentXP}
-  separator=","
-  direction="up"
-  duration={0.01}
-  className="count-up-text"
-/>/{requiredXP} XP</span>
+            <span className={styles.xp}>{currentXP.toLocaleString()}/{requiredXP} XP</span>
           </div>
         </div>
       </header>
