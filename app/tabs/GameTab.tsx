@@ -31,11 +31,6 @@ export default function GameTab() {
 
   const { handlePump } = actions;
 
-  // Debug logging
-  useEffect(() => {
-    console.log('GameTab - currentXP:', currentXP, 'requiredXP:', requiredXP);
-  }, [currentXP, requiredXP]);
-
   // Handle client-side hydration
   useEffect(() => {
     setIsClient(true);
@@ -107,7 +102,7 @@ export default function GameTab() {
       />
 
       {/* Game information */}
-      <div className={styles.gameInfo}>
+      {/* <div className={styles.gameInfo}>
         <p className={styles.infoText}>
           Click the button to earn points!<br/>
           Points decay over time - keep pumping!
@@ -120,7 +115,7 @@ export default function GameTab() {
             </div>
           )}
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

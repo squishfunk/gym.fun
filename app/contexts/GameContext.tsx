@@ -160,10 +160,8 @@ export function GameProvider({ children }: GameProviderProps) {
 
   // Handle button click
   const handlePump = useCallback(() => {
-    console.log('handlePump called, clickMultiplier:', clickMultiplier);
     setCurrentXP((prevXP: number) => {
       const newXP = prevXP + clickMultiplier;
-      console.log('XP update:', prevXP, '->', newXP);
       return newXP;
     });
     

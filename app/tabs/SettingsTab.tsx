@@ -17,7 +17,6 @@ export default function SettingsTab() {
       abi: LEADERBOARD_ABI,
       functionName: "getLeaderboard",
     });
-    console.log(result);
     return result;
   }
 
