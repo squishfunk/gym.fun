@@ -20,9 +20,11 @@ export const minikitConfig = {
   miniapp: {
     version: "1",
     name: "gym.fun",
-    subtitle: "Gym dot Fun",
+    subtitle: "Just pump it up",
     description: "Gym.fun is a gym game on Base. It is a simple game where you can pump your gym and earn money. You can also buy items to help you pump your gym.",
-    screenshotUrls: [],
+    screenshotUrls: [
+      `${ROOT_URL}/screenshot.png`,
+    ],
     iconUrl: `${ROOT_URL}/icon.png`,
     splashImageUrl: `${ROOT_URL}/splash.png`,
     splashBackgroundColor: "#000000",
