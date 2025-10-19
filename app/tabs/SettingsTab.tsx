@@ -1,8 +1,6 @@
 "use client";
 import WalletAdvancedDemo from "../components/WalletAdvancedDemo";
 import styles from "../page.module.css";
-import { useAccount, useReadContract } from 'wagmi'
-import { getChain } from "../rootProvider";
 import { LEADERBOARD_ABI } from "../../libs/abi/leaderboardAbi";
 import { readContract } from '@wagmi/core'
 import { config } from "@/libs/wagmi/config";

@@ -31,14 +31,13 @@ export default function LeaderboardTab() {
   const { state } = useGameContext();
   const { isConnected } = useAccount();
   const { currentLevel, currentXP } = state;
-  const { data: hash, writeContract, isPending } = useWriteContract();
+  const { writeContract, isPending } = useWriteContract();
   
   // State dla leaderboard
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
 
-  const { data: leaderboardResult, error: leaderboardError, isPending: leaderboardIsPending } = useReadContract({
+  const { data: leaderboardResult } = useReadContract({
     address: getContractAddress() as `0x${string}`,
     abi: LEADERBOARD_ABI,
     functionName: "getLeaderboard",
@@ -91,7 +90,7 @@ export default function LeaderboardTab() {
 
   const handleShareScore = async () => {
     try {
-      const hash = await writeContract({
+      await writeContract({
         address: getContractAddress() as `0x${string}`,
         abi: LEADERBOARD_ABI,
         functionName: "submitScore",
@@ -152,7 +151,7 @@ export default function LeaderboardTab() {
               <span>Level</span>
             </div>
             {leaderboardData
-              .sort((a, b) => b.level - a.level || b.xp - a.xp)
+              .sort((a, b) => b.level - a.level)
               .map((entry, index) => (
                 <div key={entry.address} className={styles.tableRow}>
                   <span className={styles.rank}>#{index + 1}</span>
@@ -176,11 +175,6 @@ export default function LeaderboardTab() {
         </div>
       )}
 
-      {error && (
-        <div className={styles.errorMessage}>
-          <p>Error: {error.message}</p>
-        </div>
-      )}
     </div>
   );
 }

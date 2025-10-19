@@ -2,12 +2,10 @@
 import GameEffects from "../components/GameEffects";
 import GameStats from "../components/GameStats";
 import { useGameContext } from "../contexts/GameContext";
-import { GAME_CONFIG, calculateRequiredXP, calculateTokenReward, isEligibleForReward } from "../config/gameConfig";
 import styles from "../page.module.css";
 import { useName } from "@coinbase/onchainkit/identity";
 import { useAccount } from "wagmi";
 import { base } from "viem/chains";
-import CountUp from "../../components/CountUp";
 import { useState, useEffect } from "react";
 
 export default function GameTab() {

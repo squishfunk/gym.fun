@@ -30,6 +30,9 @@ export default function GameStats({
           <span className={styles.statLabel}>XP</span>
           <span className={styles.statValue}><CountUp
   to={currentXP}
+  from={0}
+  onStart={() => {}}
+  onEnd={() => {}}
   separator=","
   direction="up"
   duration={0.01}
@@ -40,6 +43,9 @@ export default function GameStats({
         <div className={styles.statItem}>
           <span className={styles.statLabel}>Progress</span>
           <span className={styles.statValue}><CountUp
+  from={0}
+  onStart={() => {}}
+  onEnd={() => {}}
   to={Math.round(progressPercentage)}
   separator=","
   direction="up"
